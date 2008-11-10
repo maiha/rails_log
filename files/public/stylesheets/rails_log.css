@@ -1,0 +1,80 @@
+#header h1 {
+  font-size : 150%;
+  font-weight: bold;
+}
+
+h2 {
+  background  : #DED7C6;
+}
+
+table.pagination_links td {
+  padding  : 0px 20px 0px 20px;
+}
+
+div.nowrap {
+  white-space : nowrap;
+}
+
+table.summary th {
+  background-color : #F7F3E7;
+}
+
+table.summary td {
+  background-color : #FFFBFF;
+}
+
+
+#show pre.log {
+  background  : #FFFFEF none repeat scroll 0%;
+  border      : thin outset #D8E0D0;
+  font-weight : bold;
+  padding     : 5px;
+}
+
+
+table.aliceblue {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 95%;
+}
+
+table.aliceblue caption {
+  padding : 2px 5px 2px 5px;
+  text-align       : left;
+  border-style     : solid;
+  border-color     : #555555;
+  border-width     : 1px;
+  background-color : #B9E4C9;
+}
+
+table.aliceblue th {
+  padding : 2px 5px 2px 5px;
+  text-align       : left;
+  border-style     : solid;
+  border-color     : #555555;
+  border-width     : 1px;
+  background-color : #C9E4FF; <!-- aliceblue; -->
+  color            : black;
+}
+
+table.aliceblue td {
+  padding : 2px 5px 2px 5px;
+  border-color     : #555555;
+  border-width     : 1px;
+  border-style     : solid;
+  color            : darkslategray;
+}
+
+
+tr.get         td {  background-color : #F7FFDC; }
+tr.post        td {  background-color : #BDFFE8; }
+tr.head        td { }
+
+
+tr.status0     td {  background-color : orange; }
+tr.status200   td { }
+tr.status302   td {  background-color : yellow; }
+tr.status500   td {  background-color : pink; }
+

@@ -1,0 +1,44 @@
+<div id="summary">
+
+<table class="aliceblue summary">
+<caption><%= summary_count %> logs  (<%= summary_time %>)</caption>
+<tr>
+  <th>Time</th>
+  <td></td>
+  <td></td>
+</tr>
+<tr>
+  <th>Address</th>
+  <td><%= edit_address %></td>
+  <td><%= clear_form(:address) %></td>
+</tr>
+<tr>
+  <th>SessionId</th>
+  <td><%= edit_session_id %></td>
+  <td><%= clear_form(:session_id) %></td>
+</tr>
+<tr>
+  <th>Status</th>
+  <td><%= edit_status %></td>
+  <td><%= clear_form(:status) %></td>
+</tr>
+<tr>
+  <th>Method</th>
+  <td><%= edit_scheme %></td>
+  <td><%= clear_form(:scheme) %></td>
+</tr>
+<tr>
+  <th>Runtime</th>
+  <td><%= edit_runtime %></td>
+  <td><%= clear_form(:runtime) %></td>
+</tr>
+<tr>
+  <th>Page</th>
+  <td><%=  %></td>
+  <td><%= clear_form(:page) %></td>
+</tr>
+</table>
+
+<%= link_to_remote "Search", :url=>{:action=>"search"}, :submit=>"summary" %>
+
+</div>

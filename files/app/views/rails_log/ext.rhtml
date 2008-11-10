@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>Rails Log Ext</TITLE>
+<%= javascript_include_tag :defaults %>
+<%= ext_include %>
+<%= stylesheet_link_tag 'rails_log' %>
+
+<style type="text/css">
+
+#tab-panel1 .x-tabs-body {overflow:auto;}
+#tab-panel1 .x-tabs-item-body {padding:10px;}
+
+</style>
+
+</HEAD>
+<BODY>
+
+
+
+<script type="text/javascript">
+
+        Example = function(){
+                return {
+                    init : function(){
+                       var layout = new Ext.BorderLayout(document.body, {
+                            north: {
+                                split:false,
+                                initialSize: 35
+                            },
+
+                            south: {
+                                split:true,
+                                initialSize: 100,
+                                minSize: 100,
+                                maxSize: 200,
+                                titlebar: true,
+                                collapsible: true,
+                                    animate: true
+                            },
+                            west: {
+                                split:false,
+                                initialSize: 200,
+                                collapsible: false
+                            },
+                            center: {
+                                split:true,
+                                collapsible: true,
+                                animate: true,
+                                autoScroll: true
+                            }
+                        });
+                        layout.beginUpdate();
+                        layout.add('north', new Ext.ContentPanel('header', {fitToFrame:true}));
+//                        layout.add('south', new Ext.ContentPanel('footer', {fitToFrame:true}));
+//                      layout.add('west', new Ext.ContentPanel('nav', {fitToFrame:true}));
+                        layout.add('center', new Ext.ContentPanel('list'));
+                        layout.endUpdate();
+                   }
+             };
+
+        }();
+        Ext.EventManager.onDocumentReady(Example.init, Example, true);
+
+
+
+
+Ext.onReady(function(){
+
+    // create the Data Store
+    var ds = new Ext.data.Store({
+        // load using script tags for cross domain, if the data in on the same domain as
+        // this page, an HttpProxy would be better
+        proxy: new Ext.data.HttpProxy({
+            url: '/rails_log/ext'
+        }),
+
+        // create reader that reads the Topic records
+        reader: new Ext.data.JsonReader({
+            root: 'items',
+            totalProperty: 'count',
+            id: 'id'
+        }, [
+        // type: ext-1.0-alpha3/source/data/DataField.js
+
+            {name: "id"      , mapping: "id"},
+            {name: 'time'    , mapping: 'time', type: 'date', dateFormat: 'timestamp'},
+            {name: 'scheme'  , mapping: 'scheme',  type: 'string'},
+            {name: 'controller' , mapping: 'controller', type: 'string'},
+            {name: 'action' , mapping: 'action', type: 'string'},
+            {name: 'address' , mapping: 'address', type: 'string'},
+            {name: 'parameters' , mapping: 'parameters', type: 'string'},
+            {name: 'session_id' , mapping: 'session_id', type: 'string'},
+            {name: 'runtime' , mapping: 'runtime', type: 'float'},
+            {name: 'rd_runtime' , mapping: 'rd_runtime', type: 'float'},
+            {name: 'rd_percent' , mapping: 'rd_percent', type: 'int'},
+            {name: 'db_runtime' , mapping: 'db_runtime', type: 'float'},
+            {name: 'db_percent' , mapping: 'db_percent', type: 'int'},
+            {name: 'status'     , mapping: 'status'    , type: 'int'},
+            {name: 'page'       , mapping: 'page'},
+            {name: 'benchmark'  , mapping: 'benchmark'},
+            {name: 'log' , mapping: 'log', type: 'string'}
+        ]),
+
+        // turn on remote sorting
+        remoteSort: true
+    });
+
+    ds.setDefaultSort('time', '');
+
+    // pluggable renders
+    function renderItem(value){
+        return String.format('<b><i>{0}</i></b>', value);
+    }
+    function renderTime(value){
+        if (value instanceof Date){
+                return value.format('Y-m-d H:i:s');
+        } else {
+                return '';
+        }
+    }
+
+    // the column model has information about grid columns
+    // dataIndex maps the column to the specific data field in
+    // the data store
+    var cm = new Ext.grid.ColumnModel([{
+//           id: 'item',
+//           header: "ID",
+//           dataIndex: 'id',
+//           width: 50,
+//           renderer: renderItem,
+//           css: 'white-space:normal;'
+//        },{
+           header: "time",
+           dataIndex: 'time',
+           renderer: renderTime,
+           width: 120
+        },{
+           header: "address",
+           dataIndex: 'address',
+           width: 90
+        },{
+           header: "session_id",
+           dataIndex: 'session_id',
+           width: 100
+        },{
+           header: "status",
+           dataIndex: 'status',
+           align: 'right',
+           width: 40
+        },{
+           header: "method",
+           dataIndex: 'scheme',
+           align: 'center',
+           width: 40
+        },{
+           header: "page",
+           dataIndex: 'page',
+           width: 100
+        },{
+           header: "runtime",
+           dataIndex: 'runtime',
+           align: 'right',
+           width: 60
+        },{
+           header: "benchmark",
+           dataIndex: 'benchmark',
+           sortable: false,
+           width: 110
+        },{
+           header: "parameters",
+           dataIndex: 'parameters',
+           width: 300
+//         },{
+//            header: "日付",
+//            dataIndex: 'time',
+//            width: 100
+        }]);
+
+    // by default columns are sortable
+    cm.defaultSortable = true;
+
+    // create the editor grid
+    var grid = new Ext.grid.Grid('item-grid', {
+        ds: ds,
+        cm: cm,
+        selModel: new Ext.grid.RowSelectionModel({singleSelect:true}),
+        enableColLock:false
+    });
+
+    // make the grid resizable, do before render for better performance
+    var rz = new Ext.Resizable('item-grid', {
+        wrap:true,
+        minHeight:100,
+        pinned:true,
+        handles: 's'
+    });
+    rz.on('resize', grid.autoSize, grid);
+
+    // render it
+    grid.render();
+
+    var gridFoot = grid.getView().getFooterPanel(true);
+
+    // add a paging toolbar to the grid's footer
+    var paging = new Ext.PagingToolbar(gridFoot, ds, {
+        pageSize: 10,
+        displayInfo: true,
+        displayMsg: 'Displaying logs {0} - {1} of {2}',
+        emptyMsg: "No logs to display"
+    });
+
+    // trigger the data store load
+    ds.load({params:{start:0, limit:10}});
+
+
+
+
+  // Tab
+
+    tabs = new Ext.TabPanel('tab-panel1', {
+        resizeTabs:true, // turn on tab resizing
+        minTabWidth: 20,
+        preferredTabWidth:150
+    });
+
+
+    grid.addListener('rowdblclick',
+      function(g, idx, e) {
+            /**
+             * @event rowdblclick
+             * Fires when a row is double clicked
+             * @param {Grid} this
+             * @param {Number} rowIndex
+             * @param {Ext.EventObject} e
+             */
+        var data = g.getDataSource().getAt(idx);
+        var tid  = 'log' + data.id;
+        var tab  = Ext.get(tid);
+
+        if (! tab) {
+          tab = tabs.addTab(tid, tid, '', true);
+          tab.setUrl('/rails_log/show/', {id: data.id}, true);
+//           var updater = tab.getUpdateManager();
+//           updater.setDefaultUrl('/rails_log/show/'+ data.id);
+//           tab.on('activate', updater.refresh, updater);
+        }
+        tabs.activate(tab.id);
+      },
+      this, true);
+
+});
+
+
+</script>
+</header>
+
+<body>
+<div id ="container">
+  <div id="header" class="x-box-blue"  style="background-color:#C3DAF9;">
+    <h1>Rails Log Ext / <%= summary_count %> logs (<%= summary_time %>)</h1>
+  </div>
+
+  <div id="list" class="x-layout-inactive-content">
+    <div class="x-box-blue">
+      <div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>
+      <div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc">
+        <h3 style="margin-bottom:5px;">Rails Log</h3>
+        <div id="item-grid" style="border:1px solid #99bbe8;overflow: hidden;  height: 280px;"></div>
+      </div></div></div>
+      <div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>
+    </div>
+
+    <div id="tab-panel1">
+    </div>
+  </div>
+
+</div>
+ </body>
+</HTML>
+
+

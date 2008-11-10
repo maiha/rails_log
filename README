@@ -1,0 +1,83 @@
+RailsLog
+========
+
+Rails Log Analyzer
+
+
+Install
+=======
+
+1) install plugin
+
+  ./script/plugin install http://wota.jp/svn/rails/plugins/trunk/rails_log/
+
+  # Cautions: Something would go wrong when you get the plugin by svn co,
+  #           because next rake task uses 'cp -r' for installing files.
+
+2) copy files into your app
+
+  rake rails_log:install
+
+3) then, create a table (rails_logs)
+
+  rake rails_log:create
+
+
+Import
+======
+
+a) using default (using log/<RAILS_ENV>.log)
+
+  rake rails_log:import
+
+b) specify log file manually
+
+  rake rails_log:import ~/rails/app1/log/production.log
+
+
+How to use
+==========
+
+visit this url
+
+  /rails_log/
+
+
+Maintain
+========
+
+# clear imported data
+
+  rake rails_log:clear
+
+# drop table
+
+  rake rails_log:drop
+
+# uninstall controller file (guards from undesired access)
+
+  rake rails_log:uninstall
+
+
+Using Ext (Experimental)
+========================
+
+1. install Ext
+
+  # execute following lines in RAILS_ROOT directory
+
+  wget http://www.yui-ext.com/deploy/ext-1.0-alpha3.zip
+  unzip ext-1.0-alpha3.zip
+  cd public
+  ln -s ../ext-1.0-alpha3 ext
+
+  # now, "public/ext/xxx" should be exist.
+
+2. try this url!
+
+  /rails_log/ext/
+
+
+
+Copyright (c) 2008 maiha@wota.jp, released under the MIT license
+

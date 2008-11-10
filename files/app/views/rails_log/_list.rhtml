@@ -1,0 +1,36 @@
+<div id="list">
+<%= list_pagination_links %>
+<table class="aliceblue">
+<tr>
+  <th>Time</th>
+  <th>Address</th>
+  <th>SessionId</th>
+  <th>Status</th>
+  <th>Method</th>
+  <th>Page</th>
+  <th>Parameters</th>
+  <th>Runtime</th>
+  <th>
+    <span style="background-color:#FF7F7F;">DB</span>
+    <span style="background-color:#F7FF9C;">Render</span>
+    <span style="background-color:#7FFF7F;">Logic</span>
+  </th>
+  <th></th>
+</tr>
+<%- @rails_logs.each do |@rails_log| -%>
+<tr id="<%= rails_log_tr_id %>" class="<%= rails_log_tr_class %>">
+  <td><%= show_time %></td>
+  <td><%= show_address %></td>
+  <td><%= show_session_id %></td>
+  <td><%= show_status %></td>
+  <td><%= show_scheme %></td>
+  <td><%= show_page %></td>
+  <td><%= show_parameters %></td>
+  <td><%= show_runtime %></td>
+  <td><%= show_benchmark %></td>
+  <td><%= link_to_log %></td>
+</tr>
+<%- end -%>
+</table>
+<%= list_pagination_links %>
+</div>
